@@ -11,7 +11,7 @@
 
       <div class="col-6 p-5">
         <h1>temukan buku favorit</h1>
-        <form action="<?= base_url('search')?>" method="get">
+        <form action="">
           <div class="mb-3">
             <input type="text" name="judul" id="judul"
               class="form-control" placeholder="judul buku">
@@ -37,7 +37,7 @@
 
     <div class="row">
       <div class="col-12">
-        <h2>Buku Best Seller</h2>
+        <h2>Hasil Pencarian</h2>
         <div class="row">
           <div class="col-4">
             <div class="card" style="width: 18rem;">
