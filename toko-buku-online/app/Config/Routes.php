@@ -10,3 +10,5 @@ $routes->get('/chart', 'Home::chart');
 $routes->get('/checkout', 'Home::checkout');
 $routes->get('/search', 'Home::search');
 $routes->post('/submit', 'Home::submit');
+
+service('auth')->routes($routes);

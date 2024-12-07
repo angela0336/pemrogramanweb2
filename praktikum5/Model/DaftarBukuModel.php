@@ -15,12 +15,13 @@ public function getData (){
     return $daftar_buku;
 }  
 
-public function getKolomTabel(){
-    $kolom_tabel = array(
-        'no','judul','pengarang','penerbit','tahun'
-    );
+//database: perpustakaan
+//table: buku (5)
+//          id it (11) primary key auto_incriment,
+//          judul varchar (150),
+//          pengarang varchar (150),
+//          penerbit varchar (150),
+//          tahun int
 
-    return $kolom_tabel;
-}
 
 }
