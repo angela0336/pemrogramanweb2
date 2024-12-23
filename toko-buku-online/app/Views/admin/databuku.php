@@ -9,8 +9,24 @@
         </button>
     </div>
 
+
     <div class="card">
         <div class="card-body">
+            <?php if (session('sukses')): ?>
+                <div class="mb-3">
+                    <div class="alert alert-success">
+                        <strong>Sukses</strong> <?= session('sukses') ?>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <?php if (session('gagal')): ?>
+                <div class="mb-3">
+                    <div class="alert alert-danger">
+                        <strong>Gagal</strong> <?= session('gagal') ?>
+                    </div>
+                </div>
+            <?php endif ?>
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
@@ -25,54 +41,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>0001</td>
-                            <td>Lavender</td>
-                            <td>Afrozi Laksana</td>
-                            <td>PT. Rizki Sentosa</td>
-                            <td>2024</td>
-                            <td>localhost:8080/assets/1.jpg</td>
-                            <td>
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i></button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal"><i class="bi bi-trash3-fill"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>0002</td>
-                            <td>1000 Resep Makanan</td>
-                            <td>Zidan Gemilang</td>
-                            <td>PT. Rizki Sentosa</td>
-                            <td>2024</td>
-                            <td>localhost:8080/assets/2.jpg</td>
-                            <td>
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i></button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal"><i class="bi bi-trash3-fill"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>0003</td>
-                            <td>Mawar</td>
-                            <td>Afrozi Laksana</td>
-                            <td>PT. Rizki Sentosa</td>
-                            <td>2024</td>
-                            <td>localhost:8080/assets/3.jpg</td>
-                            <td>
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i></button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal"><i class="bi bi-trash3-fill"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>0004</td>
-                            <td>Belajar Membaca</td>
-                            <td>Zidan Gemilang</td>
-                            <td>PT. Rizki Sentosa</td>
-                            <td>2024</td>
-                            <td>localhost:8080/assets/4.jpg</td>
-                            <td>
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i></button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal"><i class="bi bi-trash3-fill"></i></button>
-                            </td>
-                        </tr>
+                        <?php foreach ($books as $buku) : ?>
+                            <tr>
+                                <td><?= $buku['id']; ?></td>
+                                <td><?= $buku['judul']; ?></td>
+                                <td><?= $buku['pengarang']; ?></td>
+                                <td><?= $buku['penerbit']; ?></td>
+                                <td><?= $buku['tahun']; ?></td>
+                                <td>
+                                    <img src="<?= base_url($buku['thumbnail_url']) ?>" alt="<?= $buku['judul'] ?>" class="img-thumbnail"
+                                        style="width: 150px; height: auto">
+                                </td>
+                                <td>
+                                    <a href="<?= base_url('admin/databuku/' . $buku['id'] . '/edit') ?>" class="btn btn-sm btn-success"><i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-sm btn-danger" data-bs-id="<?= $buku['id']; ?>" data-bs-toggle="modal" data-bs-target="#hapusModal"><i class="bi bi-trash3-fill"></i></button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -80,40 +65,42 @@
     </div>
 
     <!-- Modal Tambah -->
-    <div class="modal fade" id="tambahModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Tambah Buku</h1>
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">Form Tambah Buku</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="tambahBukuForm">
+                    <form action="<?= base_url('admin/databuku') ?>" method="POST" enctype="multipart/form-data"
+                        id="formTambah">
                         <div class="mb-3">
-                            <label for="judulbuku" class="form-label">Judul Buku</label>
-                            <input type="text" class="form-control" id="judulbuku" required>
+                            <label for="judul">Judul</label>
+                            <input type="text" name="judul" id="judul" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label for="pengarang" class="form-label">Pengarang</label>
-                            <input type="text" class="form-control" id="pengarang" required>
+                            <label for="pengarang">Pengarang</label>
+                            <input type="text" name="pengarang" id="pengarang" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label for="penerbit" class="form-label">Penerbit</label>
-                            <input type="text" class="form-control" id="penerbit" required>
+                            <label for="penerbit">Penerbit</label>
+                            <input type="text" name="penerbit" id="penerbit" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label for="tahun" class="form-label">Tahun</label>
-                            <input type="number" class="form-control" id="tahun" min="1900" max="2024" required>
+                            <label for="tahun">Tahun</label>
+                            <input type="text" name="tahun" id="tahun" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label for="thumbnailurl" class="form-label">Thumbnail URL</label>
-                            <input type="url" class="form-control" id="thumbnailurl" required>
+                            <label for="tahun">Cover</label>
+                            <input type="file" accept="image/*" name="thumbnail_url" id="thumbnail_url"
+                                class="form-control">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" form="tambahBukuForm" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="formTambah" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </div>
@@ -172,7 +159,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-danger">Hapus</button>
+                    <a href="<?= base_url('admin/databuku/' . $buku['id'] . '/delete') ?>" type="button" class="btn btn-danger">Hapus</a>
                 </div>
             </div>
         </div>
